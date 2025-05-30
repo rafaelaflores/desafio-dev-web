@@ -1,17 +1,124 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Emergência - Cuidado Vital</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emergência | Cuidado Vital</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <style>
+    body {
+        background-color: #f9f9f9;
+        overflow-x: hidden;
+    }
+
+    .container-agendamento {
+        background-color: transparent;
+    }
+
+    form {
+        background-color: transparent !important;
+    }
+  </style>
 </head>
 <body>
-    <header><h1>Emergência</h1></header>
-    <main>
-        <button onclick="acionarEmergencia()">Acionar Atendimento de Emergência</button>
-        <div id="resposta-emergencia"></div>
-    </main>
+  <header>
+    <div class="nav-container">
+      <h1 class="logo">Cuidado <span>Vital</span></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="agendamento.html">Agendamento</a></li>
+          <li><a href="prontuario.html">Prontuário</a></li>
+          <li><a href="emergencia.html">Emergência</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <script src="script.js"></script>
+  <main class="container-agendamento">
+    <div class="form-wrapper">
+      <section class="form-section">
+        <h2><strong>Solicitação de Emergência</strong></h2>
+        <p>Preencha os dados rapidamente para acionar nossa equipe de atendimento emergencial.</p>
+
+        <form id="emergenciaForm">
+          <label for="nome">Nome completo:</label>
+          <input type="text" id="nome" name="nome" required />
+
+          <label for="localizacao">Localização:</label>
+          <input type="text" id="localizacao" name="localizacao" required placeholder="Rua, Bairro, Cidade" />
+
+          <label for="sintomas">Sintomas principais:</label>
+            <div id="sintomas-checklist" class="mb-3">
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Dor no peito" id="sintoma1"><label class="form-check-label" for="sintoma1">Dor no peito</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Falta de ar" id="sintoma2"><label class="form-check-label" for="sintoma2">Falta de ar</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Desmaio ou tontura" id="sintoma3"><label class="form-check-label" for="sintoma3">Desmaio ou tontura</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Convulsões" id="sintoma4"><label class="form-check-label" for="sintoma4">Convulsões</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Perda de consciência" id="sintoma5"><label class="form-check-label" for="sintoma5">Perda de consciência</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Hemorragia" id="sintoma6"><label class="form-check-label" for="sintoma6">Hemorragia</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Trauma grave (acidente, queda)" id="sintoma7"><label class="form-check-label" for="sintoma7">Trauma grave (acidente, queda)</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Dor abdominal intensa" id="sintoma8"><label class="form-check-label" for="sintoma8">Dor abdominal intensa</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Febre alta persistente" id="sintoma9"><label class="form-check-label" for="sintoma9">Febre alta persistente</label></div>
+                <div class="form-check"><input class="form-check-input" type="checkbox" value="Parada respiratória" id="sintoma10"><label class="form-check-label" for="sintoma10">Parada respiratória</label></div>
+            </div>
+            <label for="outros">Outros sintomas (opcional):</label>
+            <input type="text" id="outros" name="outros" placeholder="Descreva outros sintomas..." class="form-control mb-3">
+
+          <button type="submit" class="btn btn-danger">Solicitar Atendimento</button>
+        </form>
+
+        <div id="alertaEmergencia" class="alert alert-success mt-4 d-none" role="alert"></div>
+      </section>
+    </div>
+
+    <div class="form-ilustracao">
+      <img src="img/emergency-illustration.svg" alt="Emergência médica" />
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Cuidado Vital</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(function() {
+      $('#emergenciaForm').on('submit', function(e) {
+        e.preventDefault();
+
+        const nome = $('#nome').val().trim();
+        const local = $('#localizacao').val().trim();
+        const sintomasSelecionados = [];
+        $('#sintomas-checklist input:checked').each(function () {
+        sintomasSelecionados.push($(this).val());
+        });
+
+        const outrosSintomas = $('#outros').val().trim();
+        if (outrosSintomas) {
+        sintomasSelecionados.push(outrosSintomas);
+        }
+
+        const sintomasTexto = sintomasSelecionados.length > 0 ? sintomasSelecionados.join(', ') : '';
+
+        if (nome && local && sintomasTexto) {
+          $('#alertaEmergencia')
+            .removeClass('d-none alert-danger')
+            .addClass('alert-success')
+            .html(`<strong>Solicitação registrada com sucesso!</strong><br>
+                  Nome: ${nome}<br>
+                  Localização: ${local}<br>
+                  Sintomas: ${sintomasTexto}<br>
+                  Nossa equipe está a caminho.`)
+        } else {
+          $('#alertaEmergencia')
+            .removeClass('d-none alert-success')
+            .addClass('alert-danger')
+            .html(`<strong>Por favor, preencha todos os campos.</strong>`);
+        }
+      });
+    });
+  </script>
 </body>
 </html>

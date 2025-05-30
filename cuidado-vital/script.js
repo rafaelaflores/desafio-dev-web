@@ -45,6 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
       <span><strong>Horário:</strong> ${horario}</span>
     `;
     mensagem.style.display = "block";
+
+    const novaConsulta = {
+        nome,
+        especialidade: especialidadeFormatada,
+        data: dataFormatada,
+        horario
+    };
+
+    let consultasSalvas = JSON.parse(localStorage.getItem("consultas")) || [];
+    consultasSalvas.push(novaConsulta);
+    localStorage.setItem("consultas", JSON.stringify(consultasSalvas));
+
     form.reset();
   });
 });
