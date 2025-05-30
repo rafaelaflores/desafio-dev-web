@@ -1,34 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Agendamento - Cuidado Vital</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agendamento | Cuidado Vital</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="img/favicon.png" type="image/png">
 </head>
 <body>
-    <header><h1>Agendamento de Consultas</h1></header>
+  <header>
+    <div class="nav-container">
+      <h1 class="logo">Cuidado <span>Vital</span></h1>
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="agendamento.html">Agendamento</a></li>
+          <li><a href="prontuario.html">Prontuário</a></li>
+          <li><a href="emergencia.html">Emergência</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <main>
-        <form id="form-agendamento">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" required>
+    <main class="container-agendamento">
+    <div class="form-wrapper">
+        <section class="form-section">
+        <h2>Agende sua Consulta</h2>
+        <p>Preencha as informações abaixo para realizar seu agendamento com um profissional de saúde.</p>
 
-            <label for="especialidade">Especialidade:</label>
-            <select id="especialidade">
-                <option value="clinico">Clínico Geral</option>
-                <option value="pediatria">Pediatria</option>
-                <option value="ginecologia">Ginecologia</option>
+        <form id="agendamentoForm">
+            <label for="nome">Nome completo:</label>
+            <input type="text" id="nome" name="nome" required />
+
+            <label for="especialidade">Especialidade desejada:</label>
+            <select id="especialidade" name="especialidade" required>
+            <option value="">Selecione</option>
+            <option value="clínico">Clínico Geral</option>
+            <option value="pediatria">Pediatria</option>
+            <option value="ginecologia">Ginecologia</option>
+            <option value="psicologia">Psicologia</option>
             </select>
 
-            <label for="data">Data:</label>
-            <input type="date" id="data" required>
+            <label for="data">Data da consulta:</label>
+            <input type="date" id="data" name="data" required />
 
-            <button type="submit">Agendar</button>
+            <label for="horario">Horário:</label>
+            <input type="time" id="horario" name="horario" required />
+
+            <button type="submit" class="btn">Agendar</button>
         </form>
 
-        <div id="mensagem-agendamento"></div>
-    </main>
+        <div id="mensagemConfirmacao" class="mensagem-sucesso"></div>
+        </section>
+    </div>
 
-    <script src="script.js"></script>
+    <div class="form-ilustracao">
+        <img src="img/animated-health.svg" alt="Ilustração médica animada" />
+    </div>
+    </main>
+  <footer>
+    <p>&copy; 2025 Cuidado Vital</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

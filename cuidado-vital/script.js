@@ -1,52 +1,50 @@
-// Agendamento
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("form-agendamento");
-    if (form) {
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const nome = document.getElementById("nome").value;
-            const data = document.getElementById("data").value;
-            const especialidade = document.getElementById("especialidade").value;
+  const form = document.getElementById("agendamentoForm");
+  const mensagem = document.getElementById("mensagemConfirmacao");
+  const dataInput = document.getElementById("data");
+  const hoje = new Date();
+  const yyyy = hoje.getFullYear();
+  const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+  const dd = String(hoje.getDate()).padStart(2, '0');
+  dataInput.min = `${yyyy}-${mm}-${dd}`;
 
-            document.getElementById("mensagem-agendamento").innerText =
-                `Consulta agendada para ${nome}, especialidade ${especialidade}, no dia ${data}.`;
-        });
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById("nome").value;
+    const especialidade = document.getElementById("especialidade").value;
+    const data = document.getElementById("data").value;
+    const horario = document.getElementById("horario").value;
+
+    if (!nome || !especialidade || !data || !horario) {
+      mensagem.className = "mensagem-erro";
+      mensagem.innerHTML = `<strong>Preencha todos os campos antes de agendar.</strong>`;
+      mensagem.style.display = "block";
+      return;
     }
 
-    // Prontuário
-    const prontuario = document.getElementById("prontuario");
-    if (prontuario) {
-        const dados = {
-            nome: "João da Silva",
-            idade: 42,
-            historico: [
-                "Consulta com Clínico Geral - 15/03/2025",
-                "Exame de Sangue - 17/03/2025",
-                "Prescrição de Antibiótico - 18/03/2025"
-            ]
-        };
+    const dataHoraSelecionada = new Date(`${data}T${horario}`);
+    const agora = new Date();
 
-        prontuario.innerHTML = `
-            <h2>${dados.nome} (${dados.idade} anos)</h2>
-            <h3>Histórico Médico</h3>
-            <ul>${dados.historico.map(item => `<li>${item}</li>`).join("")}</ul>
-        `;
+    if (dataHoraSelecionada < agora) {
+      mensagem.className = "mensagem-erro";
+      mensagem.innerHTML = `<strong>Não é possível agendar para o passado.</strong><br>Escolha uma data e horário válidos.`;
+      mensagem.style.display = "block";
+      return;
     }
+
+    const dataFormatada = dataHoraSelecionada.toLocaleDateString('pt-BR');
+    const especialidadeFormatada = especialidade.charAt(0).toUpperCase() + especialidade.slice(1);
+    
+    mensagem.className = "mensagem-sucesso";
+    mensagem.innerHTML = `
+      <strong>Consulta agendada com sucesso!</strong><br>
+      <span><strong>Nome:</strong> ${nome}</span><br>
+      <span><strong>Especialidade:</strong> ${especialidadeFormatada}</span><br>
+      <span><strong>Data:</strong> ${dataFormatada}</span><br>
+      <span><strong>Horário:</strong> ${horario}</span>
+    `;
+    mensagem.style.display = "block";
+    form.reset();
+  });
 });
-
-// Emergência
-function acionarEmergencia() {
-    const resposta = document.getElementById("resposta-emergencia");
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            const { latitude, longitude } = pos.coords;
-            resposta.innerHTML = `
-                <p>Emergência registrada!</p>
-                <p>Localização aproximada: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}</p>
-                <p>Equipe de atendimento será enviada imediatamente.</p>
-            `;
-        });
-    } else {
-        resposta.innerText = "Geolocalização não suportada pelo navegador.";
-    }
-}
